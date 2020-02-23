@@ -16,9 +16,9 @@ class DetailViewController: UIViewController {
     let apiService = APIService()
     
     @IBOutlet weak var gameImageView: UIImageView!
-    @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var altNameLabels: UILabel!
     @IBOutlet weak var descLabel: UILabel!
+    @IBOutlet weak var altNameLabels: UILabel!
+    @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var urlLabel: UILabel!
     
     override func viewDidLoad() {
@@ -29,39 +29,54 @@ class DetailViewController: UIViewController {
         }
         apiService.fetchGameDetail(id: id, completionHandler: reloadViews(game:))
         populateDetails()
-        //if(testInt != nil) {
-        //    titleLabel.text = String(testInt!)
-        //} else {
-        //    titleLabel.text = "12"
-        //}
-        //titleLabel.text = "12"
+
     }
     
     func reloadViews(game: GameDetail) {
         self.gameDetail = game
         DispatchQueue.main.async {
-            //need to do something here?
+            self.populateDetails()
         }
     }
     
     func populateDetails() {
-        guard let game = gameDetail else {
+        guard let gameDetail = gameDetail else {
             return
         }
         
-        let data = try? Data(contentsOf: URL(string: game.background_image_additional)!)
-        gameImageView.image = UIImage(data: data!)
-        titleLabel.text = game.name
-        
-        if(game.alternative_names.count != 0) {
-            var altNames = "Also known as: "
-            for name in game.alternative_names {
-                altNames += name + " | "
+        if(gameDetail.background_image_additional == "") {
+            guard let game = game else {
+                return
             }
+            let data = try? Data(contentsOf: URL(string: game.background_image)!)
+            gameImageView.image = UIImage(data: data!)
+        } else {
+            let data = try? Data(contentsOf: URL(string: gameDetail.background_image_additional)!)
+            gameImageView.image = UIImage(data: data!)
         }
         
-        descLabel.text = game.description
-        urlLabel.text = "For more information visit\n" + game.website
+        var original = ""
+        if(gameDetail.name_original != "") {
+            original = " (" + gameDetail.name_original + ")"
+        }
+        
+        titleLabel.text = gameDetail.name + original
+        
+        if(gameDetail.alternative_names.count != 0 && gameDetail.alternative_names != nil) {
+            var altNames = "Also known as: "
+            for name in gameDetail.alternative_names {
+                altNames += name + "   "
+            }
+            altNameLabels.text = altNames
+        } else {
+            altNameLabels.text = ""
+        }
+        
+        let descNoHTML = gameDetail.description.replacingOccurrences(of: "<[^>]+>", with: "", options: .regularExpression, range: nil)
+        let descClean = descNoHTML.replacingOccurrences(of: "&#39;", with: "'", options: .regularExpression, range: nil)
+        descLabel.text = descClean
+        
+        urlLabel.text = "Find out more at\n" + gameDetail.website
         
         
     }

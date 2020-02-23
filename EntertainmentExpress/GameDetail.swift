@@ -9,7 +9,7 @@
 import Foundation
 
 class GameDetail: Codable {
-    let id: integer_t
+    let id: Int
     let name: String
     let name_original: String
     let description: String

@@ -9,19 +9,19 @@
 import Foundation
 
 class GameResult: Codable {
-    let count: Int
-    let next: String
-    let previous: String
+    //let count: Int
+    //let next: String
+    //let previous: String
     let results: [Game]
 }
 
 class Game: Codable {
     let id: Int
-    let slug: String
+    //let slug: String
     let name: String
     let released: String
-    let tba: Bool
+    //let tba: Bool
     let background_image: String
     let rating: Double
-    let playtime: Int
+    //let playtime: Int
 }

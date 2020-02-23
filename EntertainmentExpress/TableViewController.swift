@@ -47,28 +47,28 @@ class TableViewController: UIViewController {
 
 extension TableViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        //return games?.count ?? 0
-        return 6
+        return games?.count ?? 0
+        //return 6
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "gameCell", for: indexPath) as? GameTableViewCell else {
-            //print("inside cell")
             return UITableViewCell()
         }
         
         guard let game = games?[indexPath.row] else {
-            //print("inside games")
             if(indexPath.row % 2 == 0) {
-                cell.backgroundColor = UIColor.lightGray
+                cell.backgroundColor = UIColor(displayP3Red: 167/255.0, green: 182/255.0, blue: 255/255.0, alpha: 1.0)
+            } else {
+                cell.backgroundColor = UIColor(displayP3Red: 167/255.0, green: 198/255.0, blue: 255/255.0, alpha: 1.0)
             }
             return UITableViewCell()
         }
         //assign values to cell views
         
         cell.titleLabel.text = game.name
-        cell.yearLabel.text = game.released
-        cell.ratingsLabel.text = String(game.rating) + "/5"
+        cell.yearLabel.text = "Release date: " + game.released
+        cell.ratingsLabel.text = "Rating: " + String(game.rating) + "/5"
         cell.setImage(url: game.background_image)
         
         //cell.titleLabel.text = "name"
@@ -76,7 +76,9 @@ extension TableViewController: UITableViewDataSource {
         //cell.ratingsLabel.text = "/10"
         
         if(indexPath.row % 2 == 0) {
-            cell.backgroundColor = UIColor.lightGray
+            cell.backgroundColor = UIColor(displayP3Red: 167/255.0, green: 182/255.0, blue: 255/255.0, alpha: 1.0)
+        } else {
+            cell.backgroundColor = UIColor(displayP3Red: 167/255.0, green: 198/255.0, blue: 255/255.0, alpha: 1.0)
         }
         return cell
     }
